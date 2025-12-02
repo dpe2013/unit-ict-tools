@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Download, Image as ImageIcon, FileText, FileSpreadsheet, Presentation, Music, RefreshCw, CheckCircle, AlertCircle, Menu, X, Video, Sparkles, Monitor, Keyboard, MousePointer, Images, FileArchive } from 'lucide-react';
+import { Download, Image as ImageIcon, FileText, FileSpreadsheet, Presentation, Music, RefreshCw, CheckCircle, AlertCircle, Menu, X, Video, Monitor, Keyboard, Images } from 'lucide-react';
 
 // --- HELPER: Load Script ---
 const useScript = (url: string) => {
@@ -24,7 +24,7 @@ const InteractiveBanner = () => {
       const { left, top, width, height } = bannerRef.current.getBoundingClientRect();
       const x = (e.clientX - left) / width - 0.5;
       const y = (e.clientY - top) / height - 0.5;
-      setOffset({ x: x * 20, y: y * 20 });
+      setOffset({ x: x * 20, y: y * 20 }); 
     }
   };
 
@@ -33,13 +33,13 @@ const InteractiveBanner = () => {
   };
 
   return (
-    <div
+    <div 
       ref={bannerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative w-full h-48 md:h-64 rounded-3xl overflow-hidden mb-8 shadow-2xl group perspective-1000"
     >
-      <div
+      <div 
         className="absolute inset-0 bg-cover bg-center transition-transform duration-100 ease-out scale-110"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=2070&auto=format&fit=crop')`,
@@ -47,7 +47,7 @@ const InteractiveBanner = () => {
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-blue-900/40 mix-blend-multiply"></div>
-      <div
+      <div 
         className="absolute inset-0 flex flex-col justify-center px-8 md:px-12 transition-transform duration-100 ease-out"
         style={{
           transform: `translate(${offset.x * 0.5}px, ${offset.y * 0.5}px)`,
@@ -90,7 +90,7 @@ const ImageResizer = () => {
       let height = img.height;
       let resultBlob: Blob | null = null;
       let iterations = 0;
-      const MAX_DIMENSION = 2000;
+      const MAX_DIMENSION = 2000; 
 
       if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
         const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
@@ -189,13 +189,13 @@ const ImageResizer = () => {
   );
 };
 
-// --- KOMPONEN PDF KE WORD (DIPERBAIKI) ---
+// --- KOMPONEN PDF KE WORD ---
 const PdfToWord = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isConverting, setIsConverting] = useState(false);
   const [docBlob, setDocBlob] = useState<Blob | null>(null);
   const [conversionType, setConversionType] = useState<'text' | 'image' | null>(null);
-
+  
   const convertPdf = async (pdfFile: File) => {
     setIsConverting(true);
     setConversionType(null);
@@ -209,15 +209,12 @@ const PdfToWord = () => {
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
-
-        // Periksa jika ada teks sebenar
         const pageText = textContent.items.map((item: any) => item.str).join(' ');
-
-        if (pageText.trim().length > 50) { // Ambang pengesanan teks (lebih 50 huruf per mukasurat dianggap teks)
+        
+        if (pageText.trim().length > 50) { 
             hasText = true;
             fullContent += `<p style="page-break-after: always;">${pageText}</p>`;
         } else {
-            // Jika tiada teks, render sebagai imej (Smart Fallback untuk Scanned PDF)
             const viewport = page.getViewport({ scale: 1.5 });
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -230,13 +227,10 @@ const PdfToWord = () => {
       }
 
       setConversionType(hasText ? 'text' : 'image');
-
       const htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
-        <head><meta charset='utf-8'></head>
-        <body>${fullContent}</body>
-        </html>`;
-
+        <head><meta charset='utf-8'></head><body>${fullContent}</body></html>`;
+      
       setDocBlob(new Blob(['\ufeff', htmlContent], { type: 'application/msword' }));
       setIsConverting(false);
     } catch (err) { setIsConverting(false); alert("Ralat memproses PDF"); console.error(err); }
@@ -302,7 +296,7 @@ const PdfToExcel = () => {
         const textContent = await page.getTextContent();
         const rows: { [key: number]: string[] } = {};
         textContent.items.forEach((item: any) => {
-          const y = Math.round(item.transform[5]);
+          const y = Math.round(item.transform[5]); 
           if (!rows[y]) rows[y] = [];
           rows[y].push(item.str);
         });
@@ -311,7 +305,7 @@ const PdfToExcel = () => {
            const rowText = rows[y].map(str => `"${str.replace(/"/g, '""')}"`).join(",");
            csvContent += rowText + "\n";
         });
-        csvContent += "\n";
+        csvContent += "\n"; 
       }
       setCsvBlob(new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }));
       setIsConverting(false);
@@ -414,7 +408,7 @@ const PdfToPowerpoint = () => {
   );
 };
 
-// --- KOMPONEN PDF KE GAMBAR (JPG) --- (BARU)
+// --- KOMPONEN PDF KE GAMBAR ---
 const PdfToImage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isConverting, setIsConverting] = useState(false);
@@ -422,7 +416,6 @@ const PdfToImage = () => {
   const [isZip, setIsZip] = useState(false);
   const [progress, setProgress] = useState("");
 
-  // Load JSZip for zipping multiple images
   useScript("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js");
 
   const convertToImage = async (pdfFile: File) => {
@@ -433,22 +426,19 @@ const PdfToImage = () => {
       // @ts-ignore
       const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       const totalPages = pdf.numPages;
-
-      // If single page
+      
       if (totalPages === 1) {
          const page = await pdf.getPage(1);
-         const viewport = page.getViewport({ scale: 2.0 }); // High quality
+         const viewport = page.getViewport({ scale: 2.0 }); 
          const canvas = document.createElement('canvas');
          const context = canvas.getContext('2d');
          canvas.height = viewport.height;
          canvas.width = viewport.width;
          await page.render({ canvasContext: context, viewport: viewport }).promise;
-
          const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
          setDownloadUrl(dataUrl);
          setIsZip(false);
       } else {
-         // If multiple pages, use ZIP
          // @ts-ignore
          const zip = new JSZip();
          const folder = zip.folder("images");
@@ -462,18 +452,16 @@ const PdfToImage = () => {
            canvas.height = viewport.height;
            canvas.width = viewport.width;
            await page.render({ canvasContext: context, viewport: viewport }).promise;
-
            const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
            if (blob) folder.file(`page_${i}.jpg`, blob);
          }
-
+         
          setProgress("Memampatkan fail (Zip)...");
          const content = await zip.generateAsync({ type: "blob" });
          setDownloadUrl(URL.createObjectURL(content));
          setIsZip(true);
       }
       setIsConverting(false);
-
     } catch (err) { setIsConverting(false); alert("Gagal memproses gambar."); console.error(err); }
   };
 
@@ -485,7 +473,7 @@ const PdfToImage = () => {
           <Images size={14}/> Tukar setiap halaman ke JPG
         </div>
       </div>
-
+      
       {!downloadUrl && !isConverting && (
         <div onClick={() => document.getElementById('pdfimg')?.click()} className="group border-4 border-dashed border-cyan-200/60 bg-cyan-50/30 rounded-2xl p-10 text-center cursor-pointer hover:bg-cyan-50 hover:border-cyan-400 transition-all duration-300 transform hover:-translate-y-1">
           <input id="pdfimg" type="file" onChange={(e) => {const f=e.target.files?.[0]; if(f){setFile(f); convertToImage(f);}}} className="hidden" accept="application/pdf"/>
@@ -498,7 +486,7 @@ const PdfToImage = () => {
 
       {isConverting && (
         <div className="text-center py-12">
-          <RefreshCw className="animate-spin mx-auto text-cyan-600 w-12 h-12 mb-4" />
+          <RefreshCw className="animate-spin mx-auto text-cyan-600 w-12 h-12 mb-4" /> 
           <p className="text-slate-600 font-medium">{progress}</p>
         </div>
       )}
@@ -508,7 +496,7 @@ const PdfToImage = () => {
            <div className="bg-cyan-50 p-4 rounded-xl mb-6 text-cyan-800 text-sm">
              {isZip ? "Fail PDF anda mempunyai banyak halaman. Kami telah satukan dalam satu fail ZIP." : "Gambar berjaya dihasilkan!"}
            </div>
-
+           
            <a href={downloadUrl} download={isZip ? `${file?.name.replace('.pdf','')}_images.zip` : `${file?.name.replace('.pdf','')}.jpg`} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-cyan-200 transition-all flex items-center justify-center gap-2 block no-underline">
              <Download size={20}/> {isZip ? "Muat Turun ZIP" : "Muat Turun JPG"}
            </a>
@@ -525,7 +513,7 @@ const VideoToAudio = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isConverting, setIsConverting] = useState(false);
   const [mp3Url, setMp3Url] = useState<string | null>(null);
-
+  
   useScript("https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js");
 
   const convertToMp3 = async (videoFile: File) => {
@@ -547,7 +535,7 @@ const VideoToAudio = () => {
       const left = audioBuffer.getChannelData(0);
       const right = channels > 1 ? audioBuffer.getChannelData(1) : left;
       const sampleBlockSize = 1152;
-
+      
       for (let i = 0; i < left.length; i += sampleBlockSize) {
         const leftChunk = left.subarray(i, i + sampleBlockSize);
         const rightChunk = right.subarray(i, i + sampleBlockSize);
@@ -562,7 +550,7 @@ const VideoToAudio = () => {
       }
       const mp3buf = mp3encoder.flush();
       if (mp3buf.length > 0) mp3Data.push(mp3buf);
-
+      
       const blob = new Blob(mp3Data, { type: 'audio/mp3' });
       setMp3Url(URL.createObjectURL(blob));
       setIsConverting(false);
@@ -577,7 +565,7 @@ const VideoToAudio = () => {
           <Music size={14}/> Ekstrak audio sahaja
         </div>
       </div>
-
+      
       {!mp3Url && !isConverting && (
         <div onClick={() => document.getElementById('vid2aud')?.click()} className="group border-4 border-dashed border-rose-200/60 bg-rose-50/30 rounded-2xl p-10 text-center cursor-pointer hover:bg-rose-50 hover:border-rose-400 transition-all duration-300 transform hover:-translate-y-1">
           <input id="vid2aud" type="file" onChange={(e) => {const f=e.target.files?.[0]; if(f){convertToMp3(f);}}} className="hidden" accept="video/mp4,video/webm"/>
@@ -591,7 +579,7 @@ const VideoToAudio = () => {
 
       {isConverting && (
         <div className="text-center py-12">
-          <RefreshCw className="animate-spin mx-auto text-rose-600 w-12 h-12" />
+          <RefreshCw className="animate-spin mx-auto text-rose-600 w-12 h-12" /> 
           <p className="text-slate-600 font-medium mt-4">Sedang mengekod MP3...</p>
         </div>
       )}
@@ -601,7 +589,7 @@ const VideoToAudio = () => {
            <div className="bg-white/80 p-4 rounded-xl mb-4 border border-rose-100">
              <audio controls src={mp3Url} className="w-full" />
            </div>
-
+           
            <a href={mp3Url} download={`${file?.name.replace(/\.[^/.]+$/, "")}.mp3`} className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-rose-200 transition-all flex items-center justify-center gap-2 block no-underline">
              <Download size={20}/> Muat Turun MP3
            </a>
@@ -640,7 +628,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen font-sans text-slate-800 relative overflow-hidden selection:bg-blue-200 selection:text-blue-900">
-
+      
       {/* --- LATAR BELAKANG MODEN (Background) --- */}
       <div className="fixed inset-0 z-0 bg-[#f8fafc]">
         {/* Colorful Blobs with blur */}
@@ -650,7 +638,7 @@ const App = () => {
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
-
+        
         {/* Mobile Navbar */}
         <div className="md:hidden bg-white/80 backdrop-blur-md border-b border-white p-4 flex justify-between items-center sticky top-0 z-50">
           <div className="flex items-center gap-3">
@@ -685,7 +673,7 @@ const App = () => {
 
         {/* Main Content Container */}
         <div className="flex flex-1 max-w-7xl mx-auto w-full p-4 md:p-8 gap-8">
-
+          
           {/* Sidebar (Desktop) */}
           <div className="hidden md:flex flex-col w-72 bg-white/80 backdrop-blur-xl rounded-3xl border border-white shadow-2xl shadow-slate-200/50 p-6 h-fit sticky top-8">
             <div className="mb-8 flex flex-col items-center text-center gap-3 px-2">
@@ -697,7 +685,7 @@ const App = () => {
               </h1>
               <p className="text-xs text-slate-400 font-medium px-4">Portal Aplikasi Utiliti Digital Kerajaan</p>
             </div>
-
+            
             <div className="space-y-3">
               <p className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Peralatan</p>
               {menuItems.map(item => (
@@ -705,8 +693,8 @@ const App = () => {
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
-                    activeTab === item.id
-                      ? `bg-gradient-to-r from-${item.color}-50 to-white text-${item.color}-700 shadow-md shadow-${item.color}-100 ring-1 ring-${item.color}-100 translate-x-1`
+                    activeTab === item.id 
+                      ? `bg-gradient-to-r from-${item.color}-50 to-white text-${item.color}-700 shadow-md shadow-${item.color}-100 ring-1 ring-${item.color}-100 translate-x-1` 
                       : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm'
                   }`}
                 >
@@ -728,7 +716,7 @@ const App = () => {
 
           {/* Active Tool Panel */}
           <div className="flex-1 flex flex-col">
-
+            
             {/* Banner Interaktif Baru */}
             <InteractiveBanner />
 
@@ -742,7 +730,7 @@ const App = () => {
                 {activeTab === 'mp3' && <VideoToAudio />}
               </div>
             </div>
-
+            
             <div className="mt-6 text-center text-slate-400 text-xs font-medium">
               © 2024 Unit ICT Tools • Selamat & Pantas
             </div>
