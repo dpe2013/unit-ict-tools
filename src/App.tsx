@@ -56,11 +56,12 @@ const InteractiveBanner = () => {
         <div className="flex items-center gap-3 mb-2">
             <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider shadow-lg">Portal Rasmi</span>
         </div>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-lg">
-          Unit <span className="text-blue-400">ICT</span> Tools
+        <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight drop-shadow-lg leading-tight">
+          Unit ICT <br className="md:hidden"/> PPD Padang Terap
         </h1>
+        <p className="text-blue-300 font-bold text-lg md:text-xl mt-1 tracking-widest uppercase">Digital Tools</p>
         <p className="text-slate-200 mt-2 max-w-lg text-sm md:text-base font-medium drop-shadow-md">
-          Memperkasa produktiviti digital dengan alatan pemprosesan pantas, selamat, dan efisien.
+          Memperkasa produktiviti digital warga pendidikan dengan alatan pemprosesan pantas.
         </p>
       </div>
       <div className="absolute top-4 right-8 text-white/20 animate-bounce delay-100"><Monitor size={48} /></div>
@@ -622,7 +623,7 @@ const App = () => {
     { id: 'word', label: 'PDF ke Word', icon: <FileText size={20}/>, color: 'indigo', desc: 'Tukar Dokumen' },
     { id: 'excel', label: 'PDF ke Excel', icon: <FileSpreadsheet size={20}/>, color: 'emerald', desc: 'Jadual ke CSV' },
     { id: 'ppt', label: 'PDF ke PPT', icon: <Presentation size={20}/>, color: 'orange', desc: 'Slaid Gambar' },
-    { id: 'pdf2img', label: 'PDF ke Gambar', icon: <Images size={20}/>, color: 'cyan', desc: 'PDF ke JPG/ZIP' }, // Menu Baru
+    { id: 'pdf2img', label: 'PDF ke Gambar', icon: <Images size={20}/>, color: 'cyan', desc: 'PDF ke JPG/ZIP' },
     { id: 'mp3', label: 'MP4 ke MP3', icon: <Music size={20}/>, color: 'rose', desc: 'Ekstrak Audio' },
   ];
 
@@ -643,7 +644,7 @@ const App = () => {
         <div className="md:hidden bg-white/80 backdrop-blur-md border-b border-white p-4 flex justify-between items-center sticky top-0 z-50">
           <div className="flex items-center gap-3">
              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_Malaysia.svg/600px-Coat_of_arms_of_Malaysia.svg.png" alt="Jata Negara" className="h-10 w-auto object-contain drop-shadow-sm" />
-             <span className="font-extrabold text-lg tracking-tight text-slate-800 leading-tight">Unit ICT<br/><span className="text-blue-600">Tools</span></span>
+             <span className="font-extrabold text-sm tracking-tight text-slate-800 leading-tight">Unit ICT PPD<br/><span className="text-blue-600">Padang Terap</span></span>
           </div>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
             {isMenuOpen ? <X size={24}/> : <Menu size={24}/>}
@@ -680,10 +681,10 @@ const App = () => {
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center p-2 shadow-lg mb-2">
                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_Malaysia.svg/600px-Coat_of_arms_of_Malaysia.svg.png" alt="Jata Negara" className="h-full w-full object-contain" />
               </div>
-              <h1 className="font-extrabold text-xl text-slate-800 tracking-tight leading-tight">
-                Unit ICT <span className="text-blue-600">Tools</span>
+              <h1 className="font-extrabold text-lg text-slate-800 tracking-tight leading-tight">
+                Unit ICT <br/> <span className="text-blue-600">PPD Padang Terap</span>
               </h1>
-              <p className="text-xs text-slate-400 font-medium px-4">Portal Aplikasi Utiliti Digital Kerajaan</p>
+              <p className="text-xs text-slate-400 font-medium px-4 mt-2">Tools & Utiliti Digital</p>
             </div>
             
             <div className="space-y-3">
@@ -708,7 +709,7 @@ const App = () => {
 
             <div className="mt-auto pt-8 px-4">
               <div className="p-4 bg-slate-800 rounded-2xl text-white text-center shadow-lg">
-                <p className="text-xs text-slate-400 mb-1">Versi 2.1</p>
+                <p className="text-xs text-slate-400 mb-1">Versi 2.6</p>
                 <p className="text-xs font-bold">Keselamatan Data Terjamin</p>
               </div>
             </div>
@@ -732,7 +733,7 @@ const App = () => {
             </div>
             
             <div className="mt-6 text-center text-slate-400 text-xs font-medium">
-              © 2024 Unit ICT Tools • Selamat & Pantas
+              © 2024 Unit ICT PPD Padang Terap • Selamat & Pantas
             </div>
           </div>
 
